@@ -1,0 +1,119 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% ICML 2016 EXAMPLE LATEX SUBMISSION FILE %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Use the following line _only_ if you're still using LaTeX 2.09.
+%\documentstyle[icml2016,epsf,natbib]{article}
+% If you rely on Latex2e packages, like most moden people use this:
+\documentclass{article}
+
+% use Times
+\usepackage{times}
+% For figures
+\usepackage{graphicx} % more modern
+%\usepackage{epsfig} % less modern
+\usepackage{subfigure} 
+
+% For citations
+\usepackage{natbib}
+\usepackage{amsmath}
+\newcommand{\R}{\mathbf{R}}
+% For algorithms
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+% As of 2011, we use the hyperref package to produce hyperlinks in the
+% resulting PDF.  If this breaks your system, please commend out the
+% following usepackage line and replace \usepackage{icml2016} with
+% \usepackage[nohyperref]{icml2016} above.
+\usepackage{hyperref}
+
+% Packages hyperref and algorithmic misbehave sometimes.  We can fix
+% this with the following command.
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% Employ the following version of the ``usepackage'' statement for
+% submitting the draft version of the paper for review.  This will set
+% the note in the first column to ``Under review.  Do not distribute.''
+\usepackage{icml2016} 
+
+% Employ this version of the ``usepackage'' statement after the paper has
+% been accepted, when creating the final version.  This will set the
+% note in the first column to ``Proceedings of the...''
+%\usepackage[accepted]{icml2016}
+
+
+% The \icmltitle you define below is probably too long as a header.
+% Therefore, a short form for the running title is supplied here:
+\icmltitlerunning{Paper 1822}
+
+\begin{document} 
+
+\onecolumn
+\icmltitle{Paper $1822$: Concentration Bounds for Two Timescale Stochastic Approximation with Applications to Reinforcement Learning}
+
+% It is OKAY to include author information, even for blind
+% submissions: the style file will automatically remove it for you
+% unless you've provided the [accepted] option to the icml2016
+% package.
+\icmlauthor{Your Name}{email@yourdomain.edu}
+\icmladdress{Your Fantastic Institute,
+            314159 Pi St., Palo Alto, CA 94306 USA}
+\icmlauthor{Your CoAuthor's Name}{email@coauthordomain.edu}
+\icmladdress{Their Fantastic Institute,
+            27182 Exp St., Toronto, ON M6H 2T1 CANADA}
+
+% You may provide any keywords that you 
+% find helpful for describing your paper; these are used to populate 
+% the "keywords" metadata in the PDF but will not be shown in the document
+\icmlkeywords{boring formatting information, machine learning, ICML}
+\vskip 0.3in
+
+
+Consider the stochastic approximation given by
+\begin{align}\label{sa}
+\begin{split}
+\theta_{n+1}=\theta_n+\alpha_n(0 -q\theta_n),\\
+w_{n+1}=w_n+\beta_n(0 -w_n),
+\end{split}
+\end{align}
+with step sizes $\alpha_n=\frac{1}{n}$, say $0<q<0.1$ and $\theta_n\in \R$, $w_n\in \R$, $\beta_n=\frac{1}{\sqrt{n}}$. We can put \eqref{sa} into the framework in the paper by setting $h_1=0-0.1\theta$, $h_2=0-1\,w$, $M^{(i)}_{n+1}=0,\,i=1,2$. In this case $\theta^*=0$ and $\lambda(\theta)=0$. The related ordinary differential equation is then $\dot{\theta}(t)=-q\theta(t)$ whose solution is $\theta(t)=\theta(0)e^{-qt}$ with probability $1$.  Assume $\theta(0)=\theta_0=1$ for the rest of the discussion. For the aforementioned step size $t(n)=\sum_{0\leq k\leq n} \frac{1}{k}\approx \log n$ and hence
+\begin{align}\label{loose}
+\theta(t) =e^{-q t} \Rightarrow \theta_n \approx e^{-q \log n} = \frac{1}{n^{q}}
+\end{align}
+Thus the eigenvalue shows up in the rate in the exponent in \eqref{loose}. A tighter analysis can be done on the original sequence say for $n>n_0$
+\begin{align*}
+\theta_{n}&=\Pi_{k=0}^{n-n_0}(1-\frac{q}{k+n_0}) \theta_{n_0}\\
+|\theta_{n}|&=\Pi_{k=0}^{n-n_0}(1-\frac{q}{k+n_0}) |\theta_{n_0}|
+\end{align*}
+Now using the fact that for $n_0$ sufficiently large $e^{-2\frac{q}{k+n_0}}\leq(1-\frac{q}{k+n_0})\leq e^{-\frac{q}{k+n_0}}$ we have
+\begin{align}\label{exact}
+ |\theta_{n+n_0}|&\geq |\theta_{n_0}|e^{-2q\sum_{k=0}^{n-n_0}\frac{1}{k+n_0} }\\
+|\theta_{n+n_0}|&\geq |\theta_{n_0}|e^{-2q\log(n-n_0) } \\
+|\theta_{n+n_0}|&\geq |\theta_{n_0}|\big(\frac{n_0}{n}\big)^{2q}
+\end{align}
+and the eigenvalue shows up in the form as $\frac{1}{n^{2q}}$.
+
+We now apply Corollary~$2$ to the stochastic approximation in \eqref{sa} by setting $\epsilon_2=\infty$. Now we have
+\begin{align*}
+Pr\{ |\theta_n|>\epsilon_1|G'_{n_0}\}\leq C[e^{-n_0c'_1\epsilon_1^2}+e^{-\sqrt{n_0}c'_2\epsilon_1^2/\log(n_0)}]
+\end{align*}
+Considering the fact that out of the two exponents on the right hand side of the above equation, the second term is dominant for large $n_0$ we have
+\begin{align*}
+Pr\{ \left|\theta_n\right|>\epsilon_1|G'_{n_0}\}\leq C[e^{-n_0c'_1\epsilon_1^2}+e^{-\sqrt{n_0}c'_2\epsilon_1^2/\log(n_0)}]\approx Ce^{-\sqrt{n_0}c'_2\epsilon_1^2/\log(n_0)}
+\end{align*}
+Now let $\delta=Ce^{-\sqrt{n_0}c'_2\epsilon_1^2/\log(n_0)}$,
+\begin{align}\label{interval}
+Pr\Bigg\{ \left|\theta_n\right|> \sqrt{\frac{{\log(n_0) \log(\frac{C}{\delta})}}{{c'_2} \sqrt{n_0}} }\Bigg|G'_{n_0}\Bigg\}\leq \delta.
+\end{align}
+Since $n\geq n_1\geq n_0$, we have equation \eqref{interval} starts holding for all $n\geq n_1\geq n_0$ with high probability (i.e., $1-\delta$). So for sufficiently large $n\geq n_0$, $\theta_n$ reaches $0$ at rate roughly $\frac1{n_0^{\frac{1}{4}}}$. However, from \eqref{loose} and \eqref{exact} we expect a rate $\frac1{n^q}$ where $q$ is the eigenvalue, which can be arbitrarily small.
+
+\textbf{Issue:} $c'_1$ and $c'_2$ (in Corollary~$2$ of the paper) might be dependent on $q_1$ and $q_2$ which are actually the minimum eigenvalues as mentioned in lines $489-490$ above equation (28) of the submission. However, $c'_1$ and $c'_2$ are not showing up in the exponent of $n_0$ in \eqref{interval}.
+
+\end{document}
+
+
+
+
+
+
